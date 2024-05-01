@@ -48,7 +48,7 @@ local colorschemes = {
         opts = {},
         config = function ()
             vim.cmd([[
-                colorscheme tokyonight
+                colorscheme tokyonight-moon
                 highlight BufferTabpageFill guibg=NONE
                 highlight NvimTreeIndentMarker guifg=blue
                 highlight NvimTreeFolderArrowClosed guifg=blue
@@ -124,6 +124,7 @@ local lualine_colorscheme = {
         pink = "#BB9AF7",
         orange = "#FF9E64",
     },
+
     {
         bg = "#241031",
         innerbg = nil,
@@ -137,8 +138,8 @@ local lualine_colorscheme = {
     },
 }
 
-LUALINE_COLORSCHEME = lualine_colorscheme[2] -- lualine theme
+LUALINE_COLORSCHEME = lualine_colorscheme[3] -- lualine theme
 
 return {
-    colorschemes[2], -- main theme
+    colorschemes[3], -- main theme
 }
