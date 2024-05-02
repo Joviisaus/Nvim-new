@@ -6,8 +6,9 @@ return {
         "nvim-lua/plenary.nvim",
         { 'nvim-telescope/telescope-fzf-native.nvim', build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cd build && make' },
         "nvim-tree/nvim-web-devicons",
-    },
-    config = function()
+        'nvim-telescope/telescope-file-browser.nvim',
+  },
+    config = function(_,opts)
         local telescope = require("telescope")
         local actions = require("telescope.actions")
 
@@ -23,6 +24,14 @@ return {
                 },
             },
         })
+        
+        opts.extensions = {
+          file_browser = {
+            theme = "dropdown",
+            hijack_netrw = true,
+      },
+    }
+
 
         telescope.load_extension("fzf")
 
@@ -30,10 +39,11 @@ return {
         keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>") -- find files within current working directory, respects .gitignore
         keymap.set("n", "<leader>fs", "<cmd>Telescope live_grep<cr>") -- find string in current working directory as you type
         keymap.set("n", "<leader>fc", "<cmd>Telescope grep_string<cr>") -- find string under cursor in current working directory
-        keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<cr>") -- list open buffers in current neovim instance
+        keymap.set("n", "<leader>fB", "<cmd>Telescope buffers<cr>") -- list open buffers in current neovim instance
         keymap.set("n", "<leader>fh", "<cmd>Telescope help_tags<cr>") -- list available help tags
         keymap.set("n", "<leader>fw", "<cmd>Telescope current_buffer_fuzzy_find<cr>") -- list available help tags
         keymap.set("n", "<leader>fr", "<cmd>Telescope oldfiles<cr>") -- list available help tags
+        keymap.set("n", "<space>fb", ":Telescope file_browser path=%:p:h select_buffer=true<CR>")
 
         -- telescope git commands (not on youtube nvim video)
         keymap.set("n", "<leader>gc", "<cmd>Telescope git_commits<cr>") -- list all git commits (use <cr> to checkout) ["gc" for git commits]

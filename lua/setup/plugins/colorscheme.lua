@@ -1,4 +1,5 @@
 local colorschemes = {
+    -- 1
     {
         "bluz71/vim-nightfly-guicolors",
         priority = 1000,
@@ -10,7 +11,7 @@ local colorschemes = {
                 ]])
         end,
     },
-
+    -- 2
     {
         "catppuccin/nvim",
         priority = 1000,
@@ -40,7 +41,7 @@ local colorschemes = {
                 ]])
         end,
     },
-
+    -- 3
     {
         "folke/tokyonight.nvim",
         lazy = false,
@@ -48,14 +49,13 @@ local colorschemes = {
         opts = {},
         config = function ()
             vim.cmd([[
-                colorscheme tokyonight-moon
+                colorscheme tokyonight
                 highlight BufferTabpageFill guibg=NONE
                 highlight NvimTreeIndentMarker guifg=blue
                 highlight NvimTreeFolderArrowClosed guifg=blue
                 highlight NvimTreeFolderArrowOpen guifg=blue
                 highlight WinSeparator guifg=blue
                 ]])
-
                 -- highlight SignColumn guibg=NONE
                 -- highlight DiagnosticError guibg=NONE
                 -- highlight DiagnosticWarn guibg=NONE
@@ -70,20 +70,6 @@ local colorschemes = {
             --
         end
     },
-  {
-    "rebelot/kanagawa.nvim",
-    lazy = false,
-    priority = 1000,
-    config = function()
-      vim.cmd([[
-        colorscheme kanagawa
-      ]])
-    end
-  },
-  {
-    "rose-pine/neovim", 
-    name = "rose-pine"
-  }
 }
 
 local lualine_colorscheme = {
@@ -124,17 +110,17 @@ local lualine_colorscheme = {
         pink = "#BB9AF7",
         orange = "#FF9E64",
     },
-
+    -- kanagawa-wave
     {
-        bg = "#241031",
+        bg = "#6A7589",
         innerbg = nil,
-        fg = "#A9B1D6",
-        yellow = "#FF9E64",
-        green = "#9ECE6A",
-        blue = "#2AC3DE",
-        red = "#F7768E",
-        pink = "#BB9AF7",
-        orange = "#FF9E64",
+        fg = "#43436c",
+        yellow = "#E6C384",
+        green = "#98BB6C",
+        blue = "#2D4F67",
+        red = "#E46876",
+        pink = "#a292a3",
+        orange = "#cc6d00",
     },
 }
 
