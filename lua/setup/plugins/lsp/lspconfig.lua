@@ -11,6 +11,7 @@ return {
         -- import lspconfig plugin
         local lspconfig = require("lspconfig")
 
+
         -- import cmp-nvim-lsp plugin
         local cmp_nvim_lsp = require("cmp_nvim_lsp")
 
