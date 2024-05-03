@@ -62,10 +62,21 @@ return{
   }
     dap.configurations.c = dap.configurations.cpp
 
+    vim.fn.sign_define('DapBreakpoint', {text='•', texthl='red', linehl='', numhl=''})
+    vim.fn.sign_define('DapStopped', {text='→', texthl='blue', linehl='', numhl=''})
+    vim.fn.sign_define('DapLogPoint', {text='⚑', texthl='green', linehl='', numhl=''})
+    vim.fn.sign_define('DapLogPointPC', {text='⚑', texthl='green', linehl='', numhl=''})
+    vim.fn.sign_define('DapStoppedPC', {text='→', texthl='blue', linehl='', numhl=''})
+    vim.fn.sign_define('DapBreakpointPC', {text='•', texthl='red', linehl='', numhl=''})
+    vim.fn.sign_define('DapLogPointPC', {text='⚑', texthl='green', linehl='', numhl=''})
+
+
 
     vim.keymap.set('n','<leader>dt',dap.toggle_breakpoint,{})
     vim.keymap.set('n','<leader>dc',dap.continue,{})
     vim.keymap.set('n','<leader>de',dapui.eval,{})
+    vim.keymap.set('n','<leader>dx',dap.disconnect,{})
+
     require("dapui").setup()
   end,
 }}
