@@ -62,13 +62,13 @@ return{
   }
     dap.configurations.c = dap.configurations.cpp
 
-    vim.fn.sign_define('DapBreakpoint', {text='•', texthl='red', linehl='', numhl=''})
-    vim.fn.sign_define('DapStopped', {text='→', texthl='blue', linehl='', numhl=''})
-    vim.fn.sign_define('DapLogPoint', {text='⚑', texthl='green', linehl='', numhl=''})
-    vim.fn.sign_define('DapLogPointPC', {text='⚑', texthl='green', linehl='', numhl=''})
-    vim.fn.sign_define('DapStoppedPC', {text='→', texthl='blue', linehl='', numhl=''})
-    vim.fn.sign_define('DapBreakpointPC', {text='•', texthl='red', linehl='', numhl=''})
-    vim.fn.sign_define('DapLogPointPC', {text='⚑', texthl='green', linehl='', numhl=''})
+    vim.fn.sign_define('DapBreakpoint', {text='🫸', texthl='red', linehl='', numhl=''})
+    vim.fn.sign_define('DapStopped', {text='👉', texthl='blue', linehl='', numhl=''})
+    vim.fn.sign_define('DapLogPoint', {text='🖕', texthl='green', linehl='', numhl=''})
+    vim.fn.sign_define('DapLogPointPC', {text='🖕', texthl='green', linehl='', numhl=''})
+    vim.fn.sign_define('DapStoppedPC', {text='👉', texthl='blue', linehl='', numhl=''})
+    vim.fn.sign_define('DapBreakpointPC', {text='🫸', texthl='red', linehl='', numhl=''})
+    vim.fn.sign_define('DapLogPointPC', {text='🖕', texthl='green', linehl='', numhl=''})
 
 
 
