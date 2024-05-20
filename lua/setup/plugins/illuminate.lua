@@ -19,7 +19,7 @@ return {
         vim.api.nvim_set_keymap(
             "n",
             "<leader>it",
-            ':IlluminateTogglr<cr>',
+            ':IlluminateToggle<cr>',
             { noremap = true }
         )
 
