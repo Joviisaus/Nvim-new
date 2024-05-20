@@ -29,10 +29,10 @@ return {
                 folder_level = 0,
             },
         })
-        vim.keymap.set("n", "<leader>dw", ":Lspsaga show_workspace_diagnostics<CR>")
-        vim.keymap.set("n", "<leader>db", ":Lspsaga show_buf_diagnostics<CR>")
-        vim.keymap.set('n', '<leader>t', '<cmd>Lspsaga term_toggle<CR>')
-        vim.keymap.set('t', '<leader>tt', '<cmd>Lspsaga term_toggle<CR>')
-        vim.keymap.set({'n','t'}, '<C-t>', '<cmd>Lspsaga term_toggle<CR>')
+        vim.keymap.set("n", "<leader>dw", ":Lspsaga show_workspace_diagnostics<CR>",{desc = "show workspace diagnostics"})
+        vim.keymap.set("n", "<leader>db", ":Lspsaga show_buf_diagnostics<CR>",{desc = "show buffer diagnostics"})
+        vim.keymap.set('n', '<leader>t', '<cmd>Lspsaga term_toggle<CR>', {desc = "toggle terminal"})
+        vim.keymap.set('t', '<leader>tt', '<cmd>Lspsaga term_toggle<CR>', {desc = "toggle terminal"})
+        vim.keymap.set({'n','t'}, '<C-t>', '<cmd>Lspsaga term_toggle<CR>', {desc = "toggle terminal"})
     end,
 }

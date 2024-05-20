@@ -8,6 +8,8 @@ return{
 
   },
   config = function ()
+
+    local opts = { noremap = true, silent = true }
     local dap = require("dap")
     local dapui = require("dapui")
     dap.listeners.before.attach.dapui_config = function()
@@ -72,10 +74,14 @@ return{
 
 
 
-    vim.keymap.set('n','<leader>dt',dap.toggle_breakpoint,{})
-    vim.keymap.set('n','<leader>dc',dap.continue,{})
-    vim.keymap.set('n','<leader>de',dapui.eval,{})
-    vim.keymap.set('n','<leader>dx',dap.disconnect,{})
+    opts.desc = "Toggle breakpoint"
+    vim.keymap.set('n','<leader>dt',dap.toggle_breakpoint,opts)
+    opts.desc = "Start/Continue debugging"
+    vim.keymap.set('n','<leader>dc',dap.continue,opts)
+    opts.desc = "Eval value"
+    vim.keymap.set('n','<leader>de',dapui.eval,opts)
+    opts.desc = "Debugging disconnect"
+    vim.keymap.set('n','<leader>dx',dap.disconnect,opts)
 
     require("dapui").setup()
   end,
