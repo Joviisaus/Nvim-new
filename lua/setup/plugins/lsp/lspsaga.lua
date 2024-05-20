@@ -28,6 +28,7 @@ return {
                 respect_root = true,
                 folder_level = 0,
             },
+
         })
         vim.keymap.set("n", "<leader>dw", ":Lspsaga show_workspace_diagnostics<CR>",{desc = "show workspace diagnostics"})
         vim.keymap.set("n", "<leader>db", ":Lspsaga show_buf_diagnostics<CR>",{desc = "show buffer diagnostics"})

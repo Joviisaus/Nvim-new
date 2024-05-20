@@ -1,29 +1,61 @@
-vim.cmd([[
-    set guifont=JetBrainsMono\ Nerd\ Font\ Mono:h15:sb:#e-antialias:#h-full
-    let g:neovide_transparency = 1.0
-    let g:transparency = 1.0
-    let g:neovide_background_color = '#1e1e2e'.printf('%x', float2nr(255 * g:transparency))
+if vim.g.neovide then
 
-    let g:neovide_floating_blur_amount_x = 2.0
-    let g:neovide_floating_blur_amount_y = 2.0
+    vim.g.linespace = 0
 
-    let g:neovide_refresh_rate = 60
-    let g:neovide_refresh_rate_idle = 5
+    vim.g.neovide_floating_blur_amount_x = 2.0
+    vim.g.neovide_floating_blur_amount_y = 2.0
 
-    let g:neovide_confirm_quit = v:true
+    vim.g.neovide_refresh_rate = 120
+    vim.g.neovide_refresh_rate_idle = 5
 
-    let g:neovide_hide_mouse_when_typing = v:true
+    vim.g.neovide_confirm_quit = true
 
-    let g:neovide_cursor_antialiasing = v:true
+    vim.g.neovide_floating_shadow = true
+    vim.g.neovide_floating_z_height = 10
+    vim.g.neovide_light_angle_degrees = 45
+    vim.g.neovide_light_radius = 5
 
-    let g:neovide_input_use_logo = v:true" v:true on macOS
+    vim.g.neovide_hide_mouse_when_typing = true
+    vim.g.neovide_fullscreen = true
 
-    let g:neovide_scale_factor=1.0
-    function! ChangeScaleFactor(delta)
-    let g:neovide_scale_factor = g:neovide_scale_factor * a:delta
-    endfunction
-    nnoremap <expr><D-=> ChangeScaleFactor(1.25)
-    nnoremap <expr><D--> ChangeScaleFactor(1/1.25)
 
-    let g:neovide_remember_window_size = v:true
-]])
+    vim.g.neovide_cursor_animation_length = 0.2
+
+
+    vim.g.neovide_cursor_vfx_particle_lifetime = 0.5
+
+    vim.g.neovide_cursor_antialiasing = true
+
+    vim.g.neovide_cursor_smooth_blink = false
+
+    vim.g.neovide_cursor_vfx_mode = "wireframe"
+
+    vim.g.neovide_cursor_animate_in_insert_mode = true
+
+    vim.g.neovide_touch_deadzone = 6.0
+    -- vim.g.neovide_profiler = true
+    vim.g.neovide_cursor_antialiasing = true
+
+    vim.g.neovide_cursor_unfocused_outline_width = 0.125
+
+    vim.g.neovide_theme = 'tokyonight'
+
+    vim.g.neovide_scroll_animation_length = 0.3
+
+
+    vim.g.neovide_input_use_logo = true
+    vim.g.neovide_window_blurred = true
+    vim.g.neovide_scale_factor = 0.8
+
+    function ChangeScaleFactor(delta)
+        vim.g.neovide_scale_factor = vim.g.neovide_scale_factor * delta
+    end
+
+    vim.api.nvim_set_keymap('n', '<D-=>', ':lua ChangeScaleFactor(1.25)<CR>', { noremap = true, silent = true, expr = true })
+    vim.api.nvim_set_keymap('n', '<D-->', ':lua ChangeScaleFactor(1/1.25)<CR>', { noremap = true, silent = true, expr = true })
+
+    vim.g.neovide_remember_window_size = true
+
+
+
+end

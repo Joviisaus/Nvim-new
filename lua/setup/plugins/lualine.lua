@@ -6,7 +6,7 @@ return {
         local lualine = require("lualine")
         local lazy_status = require("lazy.status") -- to configure lazy pending updates count
 
-        local colors = LUALINE_COLORSCHEME
+        local colors = require("tokyonight.colors").setup()
 
         local conditions = {
             buffer_not_empty = function()
@@ -95,7 +95,7 @@ return {
 
         ins_left({
             'branch',
-            -- icon = '',
+            icon = '',
             color = { fg = colors.green, gui = 'bold' },
         })
 
@@ -113,8 +113,8 @@ return {
             symbols = {
                 modified = '[󰷥]',      -- Text to show when the file is modified.
                 readonly = '[]',      -- Text to show when the file is non-modifiable or readonly.
-                unnamed = '[匿]', -- Text to show for unnamed buffers.
-                newfile = '[]',     -- Text to show for newly created file before first write
+                unnamed = '[匿]',      -- Text to show for unnamed buffers.
+                newfile = '[]',       -- Text to show for newly created file before first write
             },
             color = { fg = colors.blue, gui = "bold" },
         })
@@ -131,8 +131,9 @@ return {
             -- Lsp server name .
             function()
                 local msg = "No Active Lsp"
-                local buf_ft = vim.api.nvim_buf_get_option(0, "filetype")
-                local clients = vim.lsp.get_active_clients()
+                -- local buf_ft = vim.api.nvim_buf_get_option("filetype",'filetype')
+                local buf_ft = vim.bo.filetype
+                local clients = vim.lsp.get_clients()
                 if next(clients) == nil then
                     return msg
                 end
@@ -165,12 +166,12 @@ return {
             color = { fg = colors.orange },
         })
 
-        -- ins_right({
-        --     "datetime",
-        --     -- options: default, us, uk, iso, or your own format string ("%H:%M", etc..)
-        --     style = 'default',
-        --     color = { fg = colors.blue, gui = "bold" },
-        -- })
+        ins_right({
+            "datetime",
+            -- options: default, us, uk, iso, or your own format string ("%H:%M", etc..)
+            style = 'default',
+            color = { fg = colors.blue, gui = "bold" },
+        })
 
         ins_right({
             "fileformat",

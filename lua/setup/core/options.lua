@@ -46,6 +46,9 @@ vim.g.tagbar_ctags_bin = "/opt/homebrew/Cellar/universal-ctags/p6.0.20230423.0/b
 -- turn off swapfile
 opt.swapfile = false
 
+-- 设置 Visual mode 的高亮颜色  
+
+
 cmd([[
     " autocmd BufEnter *.* nohl | MinimapRefresh
     set mousescroll=ver:1,hor:1

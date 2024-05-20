@@ -24,7 +24,7 @@ return {
                 },
             },
         })
-        
+
         opts.extensions = {
           file_browser = {
             theme = "dropdown",
