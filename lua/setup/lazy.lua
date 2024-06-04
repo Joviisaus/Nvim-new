@@ -25,3 +25,5 @@ require("lazy").setup({ { import = "setup.plugins" }, { import = "setup.plugins.
         notify = false,
     },
 })
+
+
