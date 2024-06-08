@@ -20,16 +20,17 @@ if vim.g.neovide then
     vim.g.neovide_hide_mouse_when_typing = true
     vim.g.neovide_fullscreen = true
 
-    vim.g.neovide_cursor_animation_length = 0.1
+    vim.g.neovide_cursor_animation_length = 0.15
 
-
-    vim.g.neovide_cursor_vfx_particle_lifetime = 0.5
+    vim.g.neovide_cursor_vfx_particle_lifetime = 1.8
+    vim.g.neovide_cursor_vfx_particle_speed = 18.0
+    vim.g.neovide_cursor_vfx_particle_density = 14.0
 
     vim.g.neovide_cursor_antialiasing = true
 
     vim.g.neovide_cursor_smooth_blink = false
 
-    vim.g.neovide_cursor_vfx_mode = "wireframe"
+    vim.g.neovide_cursor_vfx_mode = "sonicboom"
 
     vim.g.neovide_cursor_animate_in_insert_mode = true
 
