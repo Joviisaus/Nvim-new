@@ -169,7 +169,7 @@ return {
         ins_right({
             "datetime",
             -- options: default, us, uk, iso, or your own format string ("%H:%M", etc..)
-            style = 'default',
+            style = 'us',
             color = { fg = colors.blue, gui = "bold" },
         })
 
