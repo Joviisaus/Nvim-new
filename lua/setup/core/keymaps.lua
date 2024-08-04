@@ -65,3 +65,6 @@ vim.keymap.set("n", "<leader>fg", ":registers<CR>")
 
 -- Neogit
 vim.keymap.set("n", "<leader>gg", ":Neogit<CR>")
+
+-- Neotree
+vim.keymap.set("n", "<leader>e", ":Neotree<CR>")
