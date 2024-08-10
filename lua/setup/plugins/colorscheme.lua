@@ -29,7 +29,7 @@ local colorschemes = {
                     enabled = true,
                     indentscope_color = "",
                 },
-            }
+            },
         },
         config = function()
             vim.cmd([[
@@ -42,20 +42,31 @@ local colorschemes = {
         "folke/tokyonight.nvim",
         lazy = false,
         priority = 1000,
-        config = function ()
+        config = function()
             vim.cmd([[
                 colorscheme tokyonight
                 ]])
-            end
+        end,
     },
     -- 4
     {
-        'hardhackerlabs/theme-vim',
+        "hardhackerlabs/theme-vim",
         lazy = false,
         priority = 1000,
         config = function()
-            vim.cmd.colorscheme 'hardhacker'
-        end
+            vim.cmd.colorscheme("hardhacker")
+        end,
+    },
+    -- 5
+    {
+        "scottmckendry/cyberdream.nvim",
+        lazy = false,
+        priority = 1000,
+        config = function()
+            vim.cmd([[
+                colorscheme cyberdream
+                ]])
+        end,
     },
 }
 

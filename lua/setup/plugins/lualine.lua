@@ -51,7 +51,7 @@ return {
         -- Config
         local config = {
             options = {
-                theme = my_lualine_theme,
+                theme = "auto",
                 component_separators = '',
                 section_separators = { left = '', right = '' },
             },

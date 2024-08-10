@@ -11,6 +11,7 @@ return{
         version = '2.*',
         config = function()
             require 'window-picker'.setup({
+                hint = 'floating-big-letter',
                 filter_rules = {
                     include_current_win = false,
                     autoselect_one = true,
@@ -180,7 +181,10 @@ return{
             --    show_path = "none" -- "none", "relative", "absolute"
             --  }
             --}
-            ["m"] = "move", -- takes text input for destination, also accepts the optional config.show_path option like "add".
+            ["m"] = {
+                "move", -- takes text input for destination, also accepts the optional config.show_path option like "add".
+                nowait = false,
+                    },
             ["q"] = "close_window",
             ["R"] = "refresh",
             ["?"] = "show_help",

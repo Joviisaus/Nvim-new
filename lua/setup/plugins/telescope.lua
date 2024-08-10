@@ -23,6 +23,10 @@ return {
                     },
                 },
             },
+            pickers = {
+                find_files = {
+                },
+            }
         })
 
         opts.extensions = {
