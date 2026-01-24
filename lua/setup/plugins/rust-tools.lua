@@ -5,9 +5,17 @@ return {
         local opts = { noremap = true, silent = true }
 
         local keymap = vim.keymap -- for conciseness
+        local lldb_path = "/opt/homebrew/opt/llvm/bin/lldb-dap"
         local rt = require("rust-tools")
 
         rt.setup({
+            dap = {
+                adapter = {
+                    type = "executable",
+                    command = lldb_path,
+                    name = "rt_lldb",
+                },
+            },
             server = {
                 on_attach = function(_, bufnr)
                     -- set keybinds
