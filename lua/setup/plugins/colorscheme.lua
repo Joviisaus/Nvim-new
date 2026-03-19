@@ -33,7 +33,7 @@ local colorschemes = {
         },
         config = function()
             vim.cmd([[
-                colorscheme catppuccin-mocha
+                colorscheme catppuccin-frappe
                 ]])
         end,
     },

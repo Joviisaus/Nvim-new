@@ -68,3 +68,9 @@ vim.keymap.set("n", "<leader>gg", ":Neogit<CR>")
 
 -- Neotree
 vim.keymap.set("n", "<leader>e", ":Neotree<CR>")
+
+-- 在终端模式下，按 Esc 进入 Normal 模式
+vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], { desc = "Exit terminal mode" })
+
+-- 如果你习惯用 jk 退出插入模式，也可以加上这个
+vim.keymap.set('t', 'jk', [[<C-\><C-n>]], { desc = "Exit terminal mode" })

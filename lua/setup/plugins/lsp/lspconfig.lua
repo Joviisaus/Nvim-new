@@ -8,161 +8,108 @@ return {
     },
 
     config = function()
-        -- import lspconfig plugin
         local lspconfig = require("lspconfig")
-
-
-        -- import cmp-nvim-lsp plugin
         local cmp_nvim_lsp = require("cmp_nvim_lsp")
+        local mason_lspconfig = require("mason-lspconfig")
 
-        local keymap = vim.keymap -- for conciseness
-
-        local opts = { noremap = true, silent = true }
+        -- 1. 统一处理 On_Attach 逻辑
         local on_attach = function(client, bufnr)
-            opts.buffer = bufnr
+            local opts = { noremap = true, silent = true, buffer = bufnr }
 
-            -- set keybinds
+            -- === 导航逻辑 (针对 JK 切换 Buffer 习惯优化) ===
+            -- 使用 Lspsaga 预览功能可以让你在 JK 扫视文件时，不用离开当前 Buffer 就能改代码
+            opts.desc = "Lspsaga Finder (Definition/References)"
+            vim.keymap.set("n", "gf", "<cmd>Lspsaga finder<CR>", opts)
 
-            -- references
-            opts.desc = "Show LSP references"
-            keymap.set("n", "gf", "<cmd>Telescope lsp_references<CR>", opts) -- show definition, references
-            opts.desc = "Show Lspsaga find"
-            keymap.set("n", "gF", "<cmd>Lspsaga finder<CR>", opts) -- show definition, references
+            opts.desc = "Peek Definition (在浮窗内编辑，不切 Buffer)"
+            vim.keymap.set("n", "gd", "<cmd>Lspsaga peek_definition<CR>", opts)
 
-            -- outline
-            opts.desc = "Lspsaga outline"
-            keymap.set("n", "<leader>oo", "<cmd>Lspsaga outline<CR>", opts) -- see outline on right hand side
-
-            -- definition
-            opts.desc = "Show Lspsaga peek_definition"
-            keymap.set("n", "gd", "<cmd>Lspsaga peek_definition<CR>", opts) -- see definition and make edits in window
             opts.desc = "Go to declaration"
-            keymap.set("n", "gD", vim.lsp.buf.declaration, opts) -- go to declaration
-            -- opts.desc = "Show LSP definitions"
-            -- keymap.set("n", "gd", "<cmd>Telescope lsp_definitions<CR>", opts) -- show lsp definitions
+            vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
 
-            -- implementation
-            opts.desc = "Show LSP implementations"
-            keymap.set("n", "gi", "<cmd>Telescope lsp_implementations<CR>", opts) -- show lsp implementations
+            opts.desc = "Show implementations"
+            vim.keymap.set("n", "gi", "<cmd>Telescope lsp_implementations<CR>", opts)
 
-            -- type definition
-            opts.desc = "Show LSP type definitions"
-            keymap.set("n", "gt", "<cmd>Telescope lsp_type_definitions<CR>", opts) -- show lsp type definitions
+            -- === 常用操作 ===
+            opts.desc = "Smart Rename"
+            vim.keymap.set("n", "<leader>rn", "<cmd>Lspsaga rename<CR>", opts)
 
-            -- code action
-            opts.desc = "See available Lspsaga code actions"
-            keymap.set("n", "<leader>a", "<cmd>Lspsaga code_action<CR>", opts) -- see available code actions
-            opts.desc = "See available code actions"
-            keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts) -- see available code actions, in visual mode will apply to selection
+            opts.desc = "Code Actions"
+            vim.keymap.set({ "n", "v" }, "<leader>ca", "<cmd>Lspsaga code_action<CR>", opts)
 
-            -- smart rename
-            opts.desc = "Smart rename"
-            keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts) -- smart rename
+            opts.desc = "Hover Doc"
+            vim.keymap.set("n", "gh", "<cmd>Lspsaga hover_doc<CR>", opts)
 
-            -- hover doc
-            opts.desc = "Show documentation for what is under cursor"
-            keymap.set("n", "gH", vim.lsp.buf.hover, opts) -- show documentation for what is under cursor
-            opts.desc = "Show Lspsaga documentation for what is under cursor"
-            keymap.set("n", "gh", "<cmd>Lspsaga hover_doc<CR>", opts) -- show documentation for what is under cursor
+            opts.desc = "Line Diagnostics"
+            vim.keymap.set("n", "<leader>k", "<cmd>Lspsaga show_line_diagnostics<CR>", opts)
 
-            -- diagnostics
-            opts.desc = "Show buffer diagnostics"
-            keymap.set("n", "<leader>D", "<cmd>Telescope diagnostics bufnr=0<CR>", opts) -- show  diagnostics for file
-            opts.desc = "Show line diagnostics"
-            keymap.set("n", "<leader>k", "<cmd>Lspsaga show_line_diagnostics<CR>", opts) -- show diagnostics for cursor
-            opts.desc = "Go to previous diagnostic"
-            keymap.set("n", "[d", vim.diagnostic.goto_prev, opts) -- jump to previous diagnostic in buffer
-            opts.desc = "Go to next diagnostic"
-            keymap.set("n", "]d", vim.diagnostic.goto_next, opts) -- jump to next diagnostic in buffer
-
-            opts.desc = "Restart LSP"
-            keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts) -- mapping to restart lsp if necessary
+            -- 配合 JK 切换，快速定位当前文件的错误
+            opts.desc = "Next Diagnostic"
+            vim.keymap.set("n", "]d", "<cmd>Lspsaga diagnostic_jump_next<CR>", opts)
+            opts.desc = "Prev Diagnostic"
+            vim.keymap.set("n", "[d", "<cmd>Lspsaga diagnostic_jump_prev<CR>", opts)
         end
 
-        -- used to enable autocompletion (assign to every lsp server config)
+        -- 2. 能力配置 (启用补全)
         local capabilities = cmp_nvim_lsp.default_capabilities()
+        -- 针对 clangd 的编码修复
         capabilities.offsetEncoding = { "utf-16" }
 
-        -- Change the Diagnostic symbols in the sign column (gutter)
-        -- (not in youtube nvim video)
+        -- 3. 诊断符号美化
         local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
         for type, icon in pairs(signs) do
             local hl = "DiagnosticSign" .. type
             vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
         end
 
-        -- configure html server
-        lspconfig["html"].setup({
-            capabilities = capabilities,
-            on_attach = on_attach,
-        })
+        -- 4. 核心优化：全自动 Server 配置
+        -- 只要你在 Mason 里安装了 Server，这里就会自动 setup，不需要再一个一个写
+        mason_lspconfig.setup_handlers({
+            -- 默认配置函数
+            function(server_name)
+                -- 自动更名修复
+                local server = server_name == "tsserver" and "ts_ls" or server_name
+                lspconfig[server].setup({
+                    capabilities = capabilities,
+                    on_attach = on_attach,
+                })
+            end,
 
-        -- configure typescript server with plugin
-        lspconfig["tsserver"].setup({
-            capabilities = capabilities,
-            on_attach = on_attach,
-        })
-
-        -- configure css server
-        lspconfig["cssls"].setup({
-            capabilities = capabilities,
-            on_attach = on_attach,
-        })
-
-        -- configure python server
-        lspconfig["jedi_language_server"].setup({
-            capabilities = capabilities,
-            on_attach = on_attach,
-        })
-
-        lspconfig["marksman"].setup({
-            capabilities = capabilities,
-            on_attach = on_attach,
-        })
-
-        -- configure lua server (with special settings)
-        lspconfig["lua_ls"].setup({
-            capabilities = capabilities,
-            on_attach = on_attach,
-            settings = { -- custom settings for lua
-                Lua = {
-                    -- make the language server recognize "vim" global
-                    diagnostics = {
-                        globals = { "vim" },
-                    },
-                    workspace = {
-                        -- make language server aware of runtime files
-                        library = {
-                            [vim.fn.expand("$VIMRUNTIME/lua")] = true,
-                            [vim.fn.stdpath("config") .. "/lua"] = true,
+            -- 特殊 Server 的个性化配置写在这里
+            ["lua_ls"] = function()
+                lspconfig.lua_ls.setup({
+                    capabilities = capabilities,
+                    on_attach = on_attach,
+                    settings = {
+                        Lua = {
+                            diagnostics = { globals = { "vim" } },
+                            workspace = {
+                                library = {
+                                    [vim.fn.expand("$VIMRUNTIME/lua")] = true,
+                                    [vim.fn.stdpath("config") .. "/lua"] = true,
+                                },
+                            },
                         },
                     },
-                },
-            },
-        })
+                })
+            end,
 
-        lspconfig["clangd"].setup({
-            capabilities = capabilities,
-            on_attach = on_attach,
-            -- cmd = { "clangd", "--background-index", "--clang-tidy" },
-            -- filetypes = { "c", "cpp", "objc", "objcpp" },
-            -- settings = {
-            -- 	clangd = {
-            -- 		semanticHighlighting = true,
-            -- 		serverCompletionRanking = true,
-            -- 		fallbackFlags = { "-std=c++11" },
-            -- 		detectExtensionConflicts = true,
-            -- 		checkUpdates = false,
-            -- 		arguments = { "--all-scopes-completion", "--cross-file-rename" },
-            -- 		restartAfterCrash = true,
-            -- 		onConfigChanged = "prompt",
-            -- 		header_search = { "/opt/homebrew/include", "/opt/homebrew/lib" },
-            -- 		header_insertion = "never",
-            -- 		header_insertion_decorators = "with-includepath",
-            -- 		completion_style = "detailed",
-            -- 		suggest_missing_includes = true,
-            -- 	},
-            -- },
+            ["clangd"] = function()
+                lspconfig.clangd.setup({
+                    capabilities = capabilities,
+                    on_attach = on_attach,
+                    cmd = {
+                        "clangd",
+                        "--background-index",
+                        "--clang-tidy",
+                        "--header-insertion=never",
+                        "--completion-style=detailed",
+                        "--function-arg-placeholders",
+                        "--fallback-style=llvm",
+                        "-j=4",
+                    },
+                })
+            end,
         })
     end,
 }

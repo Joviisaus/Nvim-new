@@ -7,6 +7,10 @@ return {
         local lazy_status = require("lazy.status") -- to configure lazy pending updates count
 
         local colors = require("tokyonight.colors").setup()
+        -- local colors = require("catppuccin.palettes").get_palette "mocha"
+        -- local colors = require("catppuccin.palettes").get_palette "latte"
+        -- local colors = require("catppuccin.palettes").get_palette "frappe"
+        -- local colors = require("catppuccin.palettes").get_palette "macchiato"
 
         local conditions = {
             buffer_not_empty = function()
