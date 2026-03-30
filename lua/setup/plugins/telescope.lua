@@ -1,43 +1,56 @@
-
 return {
     "nvim-telescope/telescope.nvim",
     branch = "0.1.x",
     dependencies = {
         "nvim-lua/plenary.nvim",
-        { 'nvim-telescope/telescope-fzf-native.nvim', build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cd build && make' },
+        "nvim-treesitter/nvim-treesitter",
+        {
+            "nvim-telescope/telescope-fzf-native.nvim",
+            build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cd build && make",
+        },
         "nvim-tree/nvim-web-devicons",
-        'nvim-telescope/telescope-file-browser.nvim',
-  },
-    config = function(_,opts)
+        "nvim-telescope/telescope-file-browser.nvim",
+    },
+    defaults = {
+        buffer_previewer_maker = function(filepath, bufnr, opts)
+            local max_size = 100 * 1024 -- 100KB
+            vim.loop.fs_stat(filepath, function(err, stat)
+                if not err and stat and stat.size > max_size then
+                    return
+                else
+                    require("telescope.previewers").buffer_previewer_maker(filepath, bufnr, opts)
+                end
+            end)
+        end,
+    },
+    config = function()
         local telescope = require("telescope")
         local actions = require("telescope.actions")
 
         telescope.setup({
             defaults = {
                 path_display = { "truncate" },
+                -- 性能优化：如果预览还是报错，可以暂时禁用 Treesitter 预览高亮
+                preview = { treesitter = false },
                 mappings = {
                     i = {
-                        ["<C-k>"] = actions.move_selection_previous, -- move to prev result
-                        ["<C-j>"] = actions.move_selection_next, -- move to next result
+                        ["<C-k>"] = actions.move_selection_previous,
+                        ["<C-j>"] = actions.move_selection_next,
                         ["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
                     },
                 },
             },
-            pickers = {
-                find_files = {
+            extensions = {
+                file_browser = {
+                    theme = "dropdown",
+                    hijack_netrw = true,
                 },
-            }
+            },
         })
 
-        opts.extensions = {
-          file_browser = {
-            theme = "dropdown",
-            hijack_netrw = true,
-      },
-    }
-
-
+        -- 加载扩展
         telescope.load_extension("fzf")
+        telescope.load_extension("file_browser")
 
         local keymap = vim.keymap -- for conciseness
         keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>") -- find files within current working directory, respects .gitignore

@@ -3,16 +3,19 @@ return {
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
         "hrsh7th/cmp-nvim-lsp",
+        "williamboman/mason.nvim",           -- 强制依赖 mason
+        "williamboman/mason-lspconfig.nvim", -- 强制依赖 mason-lspconfig
         { "antosha417/nvim-lsp-file-operations", config = true },
-        "simrat39/rust-tools.nvim",
     },
-
     config = function()
+        -- 确保此时 mason-lspconfig 已经准备好
         local lspconfig = require("lspconfig")
-        local cmp_nvim_lsp = require("cmp_nvim_lsp")
         local mason_lspconfig = require("mason-lspconfig")
+        local cmp_nvim_lsp = require("cmp_nvim_lsp")
 
-        -- 1. 统一处理 On_Attach 逻辑
+        -- [这里放你原来的 on_attach, capabilities, signs 定义...]
+        mason_lspconfig.setup({})
+
         local on_attach = function(client, bufnr)
             local opts = { noremap = true, silent = true, buffer = bufnr }
 
@@ -62,54 +65,6 @@ return {
             vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
         end
 
-        -- 4. 核心优化：全自动 Server 配置
-        -- 只要你在 Mason 里安装了 Server，这里就会自动 setup，不需要再一个一个写
-        mason_lspconfig.setup_handlers({
-            -- 默认配置函数
-            function(server_name)
-                -- 自动更名修复
-                local server = server_name == "tsserver" and "ts_ls" or server_name
-                lspconfig[server].setup({
-                    capabilities = capabilities,
-                    on_attach = on_attach,
-                })
-            end,
-
-            -- 特殊 Server 的个性化配置写在这里
-            ["lua_ls"] = function()
-                lspconfig.lua_ls.setup({
-                    capabilities = capabilities,
-                    on_attach = on_attach,
-                    settings = {
-                        Lua = {
-                            diagnostics = { globals = { "vim" } },
-                            workspace = {
-                                library = {
-                                    [vim.fn.expand("$VIMRUNTIME/lua")] = true,
-                                    [vim.fn.stdpath("config") .. "/lua"] = true,
-                                },
-                            },
-                        },
-                    },
-                })
-            end,
-
-            ["clangd"] = function()
-                lspconfig.clangd.setup({
-                    capabilities = capabilities,
-                    on_attach = on_attach,
-                    cmd = {
-                        "clangd",
-                        "--background-index",
-                        "--clang-tidy",
-                        "--header-insertion=never",
-                        "--completion-style=detailed",
-                        "--function-arg-placeholders",
-                        "--fallback-style=llvm",
-                        "-j=4",
-                    },
-                })
-            end,
-        })
     end,
 }
+

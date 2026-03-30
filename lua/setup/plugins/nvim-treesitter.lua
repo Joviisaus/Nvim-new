@@ -1,72 +1,38 @@
 return {
     "nvim-treesitter/nvim-treesitter",
-    event = { "BufReadPre", "BufNewFile" },
+    event = { "BufReadPost", "BufNewFile" }, -- 优化点：推迟到读取文件时加载
     build = ":TSUpdate",
     dependencies = {
         "windwp/nvim-ts-autotag",
-        "p00f/nvim-ts-rainbow",
+        "HiPhish/rainbow-delimiters.nvim",
     },
     config = function()
-        -- import nvim-treesitter plugin
-        local treesitter = require("nvim-treesitter.configs")
-
-        -- configure treesitter
-        treesitter.setup({ -- enable syntax highlighting
-            highlight = {
-                enable = true,
-            },
-            rainbow = {
-                enable = true,
-                -- disable = { "jsx", "cpp" }, list of languages you want to disable the plugin for
-                extended_mode = true, -- also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
-                max_file_lines = nil, -- do not enable for files with more than n lines, int
-                -- colors = {}, -- table of hex strings
-                -- termcolors = {} -- table of colour name strings
-            },
-            -- enable indentation
-            indent = { enable = true },
-            -- enable autotagging (w/ nvim-ts-autotag plugin)
-            autotag = { enable = true },
-            -- ensure these language parsers are installed
-            ensure_installed = {
-                "json",
-                "javascript",
-                "typescript",
-                "tsx",
-                "yaml",
-                "html",
-                "css",
-                "markdown",
-                "markdown_inline",
-                "graphql",
-                "bash",
-                "lua",
-                "vim",
-                "dockerfile",
-                "gitignore",
-                "rust",
-                "toml",
-                "glsl",
-                "latex",
-                "cpp",
-                "c",
-                "query",
-            },
-            incremental_selection = {
-                enable = true,
-                keymaps = {
-                    init_selection = "<leader>v",
-                    node_incremental = "<leader>v",
-                    scope_incremental = false,
-                    node_decremental = "<bs>",
+        local configs = pcall(require, "nvim-treesitter.configs")
+        if configs then
+            require("nvim-treesitter.configs").setup({
+                highlight = { 
+                    enable = true,
+                    disable = function(lang, buf)
+                        local max_filesize = 100 * 1024 
+                        local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+                        if ok and stats and stats.size > max_filesize then return true end
+                    end,
                 },
-            },
-            -- auto install above language parsers
-            auto_install = true,
+                indent = { enable = true },
+                autotag = { enable = true },
+                ensure_installed = { "json", "javascript", "typescript", "tsx", "lua", "vim", "vimdoc", "cpp", "c", "python" },
+            })
+        end
+
+        vim.api.nvim_create_autocmd("FileType", {
+            pattern = { "c", "cpp", "lua", "python", "javascript", "typescript", "rust" },
+            callback = function()
+                if vim.api.nvim_buf_line_count(0) < 2000 then
+                    vim.wo.foldmethod = "expr"
+                    vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()" 
+                    vim.wo.foldlevel = 99
+                end
+            end,
         })
-        -- Treesitter folding
-        -- https://neovim.io/doc/user/fold.html#fold-commands:~:text=the%20same%20time.-,2.%20Fold%20commands,-fold%2Dcommands%20E490
-        vim.wo.foldmethod = "expr"
-        vim.wo.foldexpr = "nvim_treesitter#foldexpr()"
     end,
 }
